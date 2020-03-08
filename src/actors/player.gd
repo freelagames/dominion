@@ -1,33 +1,38 @@
 extends KinematicBody2D
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+const DOMINATION_TIMER = preload("res://objects/DominationTimer.tscn")
+const SPEED = 500
 
-export (int) var speed = 200
 
 var velocity = Vector2()
+var timer = null
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	set_process_input(true)
-	pass # Replace with function body.
 
-func _input(event):
-	print(event)
+func _physics_process(delta):
 	velocity = Vector2()
-	if (event.is_action_pressed('ui_right', true)):
-		velocity.x += 1
-	if event.is_action_pressed('ui_left', true):
-		velocity.x -= 1
-	if event.is_action_pressed('ui_down', true):
-		velocity.y += 1
-	if event.is_action_pressed('ui_up', true):
-		velocity.y -= 1
-	velocity = velocity.normalized() * speed
+	if (Input.is_action_pressed('right')):
+		velocity.x += SPEED
+	elif Input.is_action_pressed('left'):
+		velocity.x -= SPEED
+	elif Input.is_action_pressed('down'):
+		velocity.y += SPEED
+
+	elif Input.is_action_pressed('up'):
+		velocity.y -= SPEED
+	else:
+		velocity.y = 0	
+
+	if timer and is_instance_valid(timer):
+		print(str(timer.elapsed_time()))
 	velocity = move_and_slide(velocity)
-	pass
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+
+func create_domination_timer(spot):
+	timer = DOMINATION_TIMER.instance()
+	timer.setup(spot)
+
+func destroy_domination_timer():
+	print(str(timer.elapsed_time()))
+	timer.queue_free()

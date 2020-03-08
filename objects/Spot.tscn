@@ -1,14 +1,26 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/Spot.png" type="Texture" id=1]
+[ext_resource path="res://src/actors/spot.gd" type="Script" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 95.1893
 
-[node name="Spot" type="StaticBody2D"]
+[node name="Spot" type="Area2D"]
+collision_layer = 2
+script = ExtResource( 2 )
 
-[node name="Sprite" type="Sprite" parent="."]
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_left = -96.4697
+margin_top = -97.9771
+margin_right = 97.5303
+margin_bottom = 101.023
 texture = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
+[connection signal="body_entered" from="." to="." method="_on_Spot_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_Spot_body_exited"]
